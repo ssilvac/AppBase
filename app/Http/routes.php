@@ -40,11 +40,10 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::group(['middleware' => 'auth'], function () {
 
-
-		Route::get('/home',[
-	    	'uses' => 'HomeController@index',
-	    	'as' => 'home'
-	    ]);
+		Route::get('/home', [
+			'uses' => 'HomeController@index',
+			'as' => 'home',
+		]);
 
 		# debe verificar cuenta
 		Route::group(['middleware' => 'verified'], function () {
@@ -58,7 +57,15 @@ Route::group(['middleware' => ['web']], function () {
 				return "Prueba DOS";
 			});
 
-			# ademas de iniciar sesión debe tner una cuenta verificada
+			# Admin / Users
+			Route::resource('admin/users', 'UserController');
+
+			Route::get('admin/users/{id}/delete', [
+				'as' => 'users.delete',
+				'uses' => 'UserController@destroy',
+			]);
+
+			# SETTING
 			Route::get('admin/settings', function () {
 				return view('admin/settings');
 			});
